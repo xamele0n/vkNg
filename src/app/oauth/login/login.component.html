@@ -1,0 +1,18 @@
+<p>
+login Works!      
+</p>
+<p>And got {{ token }}</p>
+<div *ngIf="autorized">
+    <p>You are autorized!</p>
+    <table>
+        <thead>
+        <tr><td>Users</td></tr>
+        </thead>
+        <tbody>
+            <tr  *ngFor="let u of users" >
+                <td>{{ u.id }}</td>
+                <td>{{ u.first_name}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

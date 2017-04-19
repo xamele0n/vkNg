@@ -1,3 +1,13 @@
 <h1>
   {{title}}
 </h1>
+<form novalidate>
+  <input type="hidden" name="client_id" value="{{ clientId }}">
+   <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+   <input type="hidden" name="display" value="{{ display }}">
+   <input type="hidden" name="scope" value="{{ scope }}">
+   <input type="hidden" name="response_type" value="{{ response_type }}">
+   <input type="hidden" name="v" value="{{ version }}">   
+  <input type="button" name="submit" value="Autorize" ng-click="Autorize($event)" (click)="Authorize()">
+</form>
+

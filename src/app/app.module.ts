@@ -4,17 +4,32 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { LoginComponent } from './oauth/login/login.component';
+import { RouterModule, Routes } from '@angular/router';
+import { TokenService } from './token.service'
+
+
+const appRoutes: Routes = [ 
+  {
+    path: 'oauth/login',
+    component: LoginComponent    
+  },  
+  { path: '**', component: AppComponent }
+];
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [TokenService],
+  bootstrap: [AppComponent, LoginComponent]
 })
 export class AppModule { }
