@@ -7,14 +7,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './oauth/login/login.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TokenService } from './token.service'
-
+import { VkService } from './vk.service'
+import { UserModule } from './user/user.module'
 
 const appRoutes: Routes = [ 
   {
     path: 'oauth/login',
     component: LoginComponent    
   },  
-  { path: '**', component: AppComponent }
+  { path: '', component: LoginComponent }
 ];
 
 
@@ -28,8 +29,9 @@ const appRoutes: Routes = [
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes)
+    
   ],
-  providers: [TokenService],
-  bootstrap: [AppComponent, LoginComponent]
+  providers: [TokenService, VkService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

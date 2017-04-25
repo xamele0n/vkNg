@@ -12,7 +12,7 @@ export class TokenService {
     this.access_token = token;
   }
 
-  public getTokent():string{
+  public getToken():string{
     return this.access_token;
   }
 
