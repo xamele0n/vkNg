@@ -27,7 +27,26 @@
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       }
-    }
+    },
+     {
+      "name":"backend",
+      "root": "src/api",
+      "outDir": "dist/api",
+      "assets": [        
+      ],
+      "index": "index.html",
+      "main": "server.ts",     
+      "tsconfig": "tsconfig.json",      
+      "prefix": "api",
+      "styles": [       
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }    
   ],
   "e2e": {
     "protractor": {

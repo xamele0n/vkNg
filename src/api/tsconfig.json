@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "../../dist/api",
-    "baseUrl": "",
+    "baseUrl": ".",
     "target": "es5",
     "module": "CommonJS",
     "sourceMap": true,
@@ -12,5 +12,8 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
+  ],
+  "include": [
+    "**/*.ts"
   ]
 }

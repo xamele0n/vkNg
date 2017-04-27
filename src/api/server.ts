@@ -1,6 +1,9 @@
-import express = require('express');
-import bodyParser = require('body-parser');
-import path = require('path')
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as path from 'path';
+import * as session from 'express-session'
+import { LoginController } from './controllers/login'
+
 
 class Server {
     public server : any;
@@ -9,17 +12,31 @@ class Server {
         this.server = express();
         this.server.use(bodyParser.json());
         this.server.use(bodyParser.urlencoded({ extended: false }));
+        this.server.set('trust proxy', 1) // trust first proxy
+        this.server.use(session({
+            secret: 'very secret phrase',
+            resave: false,
+            saveUninitialized: true,
+            cookie: { secure: false, path :'/api' }  ,                      
+            }));
         // set env
         this.server.set('views',path.join(__dirname,'../../src'));
 
         //setup routes
         var router = express.Router();
         router.get('/', (req, res) => {
-            res.send('api works');
-            });
+            if (!req.session.tkn){
+                console.log('set session');
+                req.session.tkn = '1';
+                req.session.save(r=>{});
+            }
+            res.json(req.session);
+        });
+        var login = new LoginController();
+        router.get('/oauth/login', (r,rp) => login.Get(r,rp));
         this.server.use('/api', router);
         this.server.get('/', function(req : express.Request, res: express.Response) {
-                res.sendFile('index.html', { root: './src/' });
+                res.sendFile('index.html', { root: './src/'});
             });
         var port = process.env.PORT || '3000';
         
@@ -29,4 +46,3 @@ class Server {
 }
 
 export let server = new Server();
-
