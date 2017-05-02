@@ -2,6 +2,7 @@ import * as express from 'express'
 import * as session from 'express-session'
 import * as http from 'http'
 import * as rp from 'request-promise'
+import * as Promise from 'promise'
 
 export class LoginController {
 
@@ -20,24 +21,21 @@ public autorized: boolean = false;
   
   constructor( ) {  }   
 
-  private GetToken(req : express.Request, res: express.Response):Promise<string>{
+  private GetToken(req : express.Request):Promise<any>{
     console.log('current fragment');
     console.log(req.url);
     if (req.query){
         if (req.query.error){
-            res.status(500);
-            res.write(req.query.error_description);
-            res.end();
-            return;
+          throw new Error(req.query.error_description);
         }
         var code = req.query.code;       
         if (code){
             var url = this.token_url.concat("?").concat("client_id=", this.clientId,"&redirect_uri=",this.redirect_uri, "&client_secret=",this.secret,"&code=", code);
             return rp.get(url)
-                .then(data => JSON.parse(data).access_token);
+                .then(r => JSON.parse(r));
     }
   }  
-  this.Redirect(res);
+  return Promise.reject(401);
 }
 
   private state():string {
@@ -54,17 +52,20 @@ public autorized: boolean = false;
   public Get(req : express.Request, res: express.Response){
         
         if (!req.session.token){  
-            this.GetToken(req, res).then(token =>{
-                  if (!token){
+            this.GetToken(req).then(token =>{
+                 if (!token){
                  this.Redirect(res);
                  return;
                 }  
-                req.session.token = token;
+                req.session.token = token.access_token;
+                req.session.user_id = token.user_id;
+                //req.session.cookie.expires = token.expires_in;
                 req.session.save(err=>{console.log(err);});
-                res.status(200);
-                res.write('Authorization success');
-                res.write(token);       
-                res.end();    
+                res.redirect(req.session.originalUrl);  
+            }, err => {
+              req.session.originalUrl = req.url;
+              req.session.save(err=>{console.log(err);});
+              this.Redirect(res);
             }).catch(r =>{res.json(r);});    
             return; 
         }

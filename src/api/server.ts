@@ -3,6 +3,8 @@ import * as bodyParser from 'body-parser';
 import * as path from 'path';
 import * as session from 'express-session'
 import { LoginController } from './controllers/login'
+import { UserController } from './controllers/user'
+
 
 
 class Server {
@@ -32,8 +34,13 @@ class Server {
             }
             res.json(req.session);
         });
-        var login = new LoginController();
+        // oauth routes
+        var login = new LoginController();        
         router.get('/oauth/login', (r,rp) => login.Get(r,rp));
+        // user routes
+        var user= new UserController();
+        router.get('/user', (r,rp) => user.Get(r, rp));
+        // setup routes
         this.server.use('/api', router);
         this.server.get('/', function(req : express.Request, res: express.Response) {
                 res.sendFile('index.html', { root: './src/'});
